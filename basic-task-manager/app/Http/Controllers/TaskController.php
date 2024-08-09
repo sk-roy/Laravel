@@ -63,7 +63,9 @@ class TaskController extends Controller
     }
 
     public function showList() {
-        $tasks = Task::where('user_id', auth()->id())->get();
+        $sortColumn = request('sort', 'status');
+        $sortDirection = request('direction', 'asc'); 
+        $tasks = Task::where('user_id', auth()->id())->orderBy($sortColumn, $sortDirection)->get();
         return view('tasks.list', compact('tasks'));
     }
 }

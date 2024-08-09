@@ -17,7 +17,7 @@
                             <th class="py-3 px-4 border-b">Title</th>
                             <th class="py-3 px-4 border-b">Description</th>
                             <th class="py-3 px-4 border-b">Due Date</th>
-                            <th class="py-3 px-4 border-b">Status</th>
+                            <th class="py-3 px-4 border-b">@sortablelink('Status')</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-700">

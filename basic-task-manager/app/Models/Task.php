@@ -13,6 +13,10 @@ class Task extends Model
         'user_id', 'title', 'description', 'due_date', 'status',
     ];
 
+    public $sortable = [
+        'due_date', 'status',
+    ];
+
     protected $casts = [
         'due_date' => 'date',  // Cast to Carbon instance
     ];
