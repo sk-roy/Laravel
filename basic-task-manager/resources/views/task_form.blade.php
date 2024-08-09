@@ -26,7 +26,7 @@
 
             <div class="mb-4">
                 <label for="due_date" class="block text-gray-700 font-medium mb-2">Due Date</label>
-                <input type="date" id="due_date" name="due_date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="due_date" name="due_date" value="{{ old('due_date', date('Y-m-d')) }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div class="mb-4">

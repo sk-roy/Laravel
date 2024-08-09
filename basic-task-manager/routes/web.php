@@ -9,6 +9,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [TaskController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
     Route::get('/task-form', function () { return view('task_form'); })->name('task-form');
+    Route::get('/tasklist', function () { return view('tasklist'); })->name('tasklist');
+    Route::get('/tasks/list', [TaskController::class, 'showList'])->name('tasks.list');
+
 
     Route::resource('tasks', TaskController::class);
 

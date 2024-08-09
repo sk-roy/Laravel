@@ -61,4 +61,9 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
+
+    public function showList() {
+        $tasks = Task::where('user_id', auth()->id())->get();
+        return view('tasks.list', compact('tasks'));
+    }
 }
