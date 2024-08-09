@@ -8,16 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
-    {
-        // $tasks = Auth::user()->tasks()->get();
-        // return view('dashboard', compact('tasks'));
-        return view('dashboard');
-        // return view('task_form');
+    public function index() {
+        $tasks = Task::where('user_id', auth()->id())->get();
+        return view('dashboard', compact('tasks'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'title' => 'required|string',
             'description' => 'nullable|string',
@@ -34,5 +30,35 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('task-form')->with('success', 'Task created successfully.');
+    }
+
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        // return view('task-form', compact('task'));
+        return view('tasks.edit', compact('task'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'due_date' => 'nullable|date',
+            'status' => 'nullable|boolean',
+        ]);
+
+        $task = Task::findOrFail($id);
+        $task->update($request->all());
+
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->delete();
+
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 }
