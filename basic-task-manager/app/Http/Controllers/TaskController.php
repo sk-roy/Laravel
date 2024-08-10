@@ -29,13 +29,12 @@ class TaskController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('task-form')->with('success', 'Task created successfully.');
+        return redirect()->route('tasks.form')->with('success', 'Task created successfully.');
     }
 
     public function edit($id)
     {
         $task = Task::findOrFail($id);
-        // return view('task-form', compact('task'));
         return view('tasks.edit', compact('task'));
     }
 
@@ -62,7 +61,7 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 
-    public function showList() {
+    public function list() {
         $sortColumn = request('sort', 'status');
         $sortDirection = request('direction', 'asc'); 
         $tasks = Task::where('user_id', auth()->id())->orderBy($sortColumn, $sortDirection)->get();
