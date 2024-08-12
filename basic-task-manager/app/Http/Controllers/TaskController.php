@@ -3,17 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Http\Services\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index() {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
+    public function index() 
+    {
         $tasks = Task::where('user_id', auth()->id())->get();
         return view('dashboard', compact('tasks'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request) 
+    {
         $request->validate([
             'title' => 'required|string',
             'description' => 'nullable|string',
@@ -21,7 +31,7 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        Task::create([
+        $this->taskService->createTask([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -34,7 +44,7 @@ class TaskController extends Controller
 
     public function edit($id)
     {
-        $task = Task::findOrFail($id);
+        $task = $this->taskService->editTask($id);
         return view('tasks.edit', compact('task'));
     }
 
@@ -46,25 +56,21 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'status' => 'nullable|boolean',
         ]);
-
-        $task = Task::findOrFail($id);
-        $task->update($request->all());
+        $this->taskService->updateTask($request, $id);
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
 
     public function destroy($id)
     {
-        $task = Task::findOrFail($id);
-        $task->delete();
-
+        $this->taskService->destroyTask($id);
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 
     public function list() {
         $sortColumn = request('sort', 'status');
         $sortDirection = request('direction', 'asc'); 
-        $tasks = Task::where('user_id', auth()->id())->orderBy($sortColumn, $sortDirection)->get();
+        $tasks = $this->taskService->listTask($sortColumn, $sortDirection);
         return view('tasks.list', compact('tasks'));
     }
 }
