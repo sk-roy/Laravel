@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService
 {
@@ -15,9 +16,21 @@ class TaskService
         //
     }
 
-    public function createTask($data)
+    public function indexTask()
     {
-        return Task::create($data);
+        return auth()->user()->tasks;
+    }
+
+    public function createTask(Request $request)
+    {
+        $task = Task::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'due_date' => $request->input('due_date'),
+            'status' => $request->input('status'),
+        ]);
+
+        $task->users()->attach(Auth::id());
     }
 
     public function editTask($id)
@@ -52,8 +65,7 @@ class TaskService
     }
 
     public function listTask($sortColumn, $sortDirection)
-    {
-        $tasks = Task::where('user_id', auth()->id())->orderBy($sortColumn, $sortDirection)->get();
-        return $tasks;
+    {        
+        return auth()->user()->tasks()->orderBy($sortColumn, $sortDirection)->get();
     }
 }

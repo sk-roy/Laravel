@@ -10,7 +10,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'due_date', 'status',
+        'title', 'description', 'due_date', 'status',
     ];
 
     public $sortable = [
@@ -18,11 +18,11 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'due_date' => 'date',  // Cast to Carbon instance
+        'due_date' => 'date',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'user_task');
     }
 }

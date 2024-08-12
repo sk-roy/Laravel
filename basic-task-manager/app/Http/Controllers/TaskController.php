@@ -18,7 +18,7 @@ class TaskController extends Controller
 
     public function index() 
     {
-        $tasks = Task::where('user_id', auth()->id())->get();
+        $tasks = $this->taskService->indexTask();
         return view('dashboard', compact('tasks'));
     }
 
@@ -31,13 +31,7 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        $this->taskService->createTask([
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'due_date' => $request->due_date,
-            'status' => $request->status,
-        ]);
+        $this->taskService->createTask($request);
 
         return redirect()->route('tasks.form')->with('success', 'Task created successfully.');
     }
