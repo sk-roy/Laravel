@@ -28,15 +28,27 @@ class TaskService
 
     public function updateTask(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
-        $task->update($request->all());
-        return $task;
+        try {
+            $task = Task::findOrFail($id);
+            $task->update($request->all());
+            return $task;
+        } catch (ModelNotFoundException $e) {
+            throw new Exception("Task not found", 404);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while updating the task", 500);
+        }
     }
 
     public function destroyTask($id)
     {
-        $task = Task::findOrFail($id);
-        $task->delete();
+        try {
+            $task = Task::findOrFail($id);
+            $task->delete();
+        } catch (ModelNotFoundException $e) {
+            throw new Exception("Task not found", 404);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while deleting the task", 500);
+        }
     }
 
     public function listTask($sortColumn, $sortDirection)
