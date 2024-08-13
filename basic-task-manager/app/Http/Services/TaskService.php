@@ -16,12 +16,12 @@ class TaskService
         //
     }
 
-    public function indexTask()
+    public function index()
     {
         return auth()->user()->tasks;
     }
 
-    public function createTask(Request $request)
+    public function create(Request $request)
     {
         $task = Task::create([
             'title' => $request->input('title'),
@@ -33,13 +33,13 @@ class TaskService
         $task->users()->attach(Auth::id());
     }
 
-    public function editTask($id)
+    public function edit($id)
     {
         $task = Task::findOrFail($id);
         return $task;
     }
 
-    public function updateTask(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $task = Task::findOrFail($id);
@@ -52,7 +52,7 @@ class TaskService
         }
     }
 
-    public function destroyTask($id)
+    public function destroy($id)
     {
         try {
             $task = Task::findOrFail($id);
@@ -64,7 +64,7 @@ class TaskService
         }
     }
 
-    public function listTask($sortColumn, $sortDirection)
+    public function list($sortColumn, $sortDirection)
     {        
         return auth()->user()->tasks()->orderBy($sortColumn, $sortDirection)->get();
     }
