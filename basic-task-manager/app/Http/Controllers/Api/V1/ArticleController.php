@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Article;
-use App\Http\Services\ArticleService;
+use App\Http\Services\Api\V1\ArticleService;
 
 class ArticleController extends Controller
 {
