@@ -21,4 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles', [ArticleController::class, 'store']);
     Route::put('/articles/{article}', [ArticleController::class, 'update']);
     Route::delete('/articles/{article}', [ArticleController::class, 'delete']);
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });
