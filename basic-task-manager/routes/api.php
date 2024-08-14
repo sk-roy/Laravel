@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\AuthController;
-use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\TaskController;
 
 
 
@@ -14,13 +14,12 @@ Route::get('/user', function (Request $request) {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/articles', [ArticleController::class, 'index']);
-    Route::get('/articles/{article}', [ArticleController::class, 'show']);
-    Route::post('/articles', [ArticleController::class, 'store']);
-    Route::put('/articles/{article}', [ArticleController::class, 'update']);
-    Route::delete('/articles/{article}', [ArticleController::class, 'delete']);
+    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::get('/tasks/{id}', [TaskController::class, 'getTask']);
+    Route::post('/tasks/create', [TaskController::class, 'store']);
+    Route::post('/tasks/{id}/update', [TaskController::class, 'update']);
+    Route::delete('/tasks/{id}/delete', [TaskController::class, 'destroy']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });

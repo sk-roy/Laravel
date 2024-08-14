@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\Api\V1;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,13 @@ class TaskService
 
     public function index()
     {
-        return auth()->user()->tasks;
+        $user = User::findOrFail(1);  // assume current user Id is 1
+        return $user->tasks()->get();
+    }
+
+    public function getTask($id)
+    {
+        return Task::findOrFail($id);
     }
 
     public function create(Request $request)
@@ -30,25 +37,14 @@ class TaskService
             'status' => $request->input('status'),
         ]);
 
-        $task->users()->attach(Auth::id());
-    }
-
-    public function edit($id)
-    {
-        $task = Task::findOrFail($id);
-        return $task;
+        $task->users()->attach(1); // assume current user Id is 1
     }
 
     public function update(Request $request, $id)
     {
         try {
             $task = Task::findOrFail($id);
-            $task->update([
-                'title' => $request->input('title'),
-                'description' => $request->input('description'),
-                'due_date' => $request->input('due_date'),
-                'status' => $request->input('status'),
-            ]);
+            $task->update($request->all());
             return $task;
         } catch (ModelNotFoundException $e) {
             throw new Exception("Task not found", 404);
@@ -67,10 +63,5 @@ class TaskService
         } catch (Exception $e) {
             throw new Exception("An error occurred while deleting the task", 500);
         }
-    }
-
-    public function list($sortColumn, $sortDirection)
-    {        
-        return auth()->user()->tasks()->orderBy($sortColumn, $sortDirection)->get();
     }
 }

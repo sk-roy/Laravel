@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Task;
 use Illuminate\Support\Facades\Hash;
 
 
-class UserSeeder extends Seeder
+class TaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,22 +22,21 @@ class UserSeeder extends Seeder
         // Let's make sure everyone has the same password and 
         // let's hash it before the loop, or else our seeder 
         // will be too slow.
-        $password = Hash::make('taskmanager');
 
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@test.com',
-            'password' => $password,
-            'admin' => true,
+        Task::create([
+            'title' => 'Add title',
+            'description' => 'description',
+            'due_date' => now(),
+            'status' => true,
         ]);
 
         // And now let's generate a few dozen users for our app:
-        for ($i = 0; $i < 4; $i++) {
-            User::create([
-                'name' => $faker->name,
-                'email' => $faker->email,
-                'password' => $password,
-                'admin' => rand(true, false),
+        for ($i = 0; $i < 19; $i++) {
+            Task::create([
+                'title' => $faker->sentence,
+                'description' => $faker->paragraph,
+                'due_date' => now()->addDays(rand(0, 30)),
+                'status' => rand(true, false),
             ]);
         }
     }
