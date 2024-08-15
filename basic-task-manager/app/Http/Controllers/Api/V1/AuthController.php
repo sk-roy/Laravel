@@ -37,14 +37,20 @@ class AuthController extends Controller
     {        
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        if (!Auth::attempt($credentials)) {
+            return response([
+                'message' => 'Invalid Credentials!',
+            ], 401);
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401);
+        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        $cookie = cookie('jwt', $token, 60*24); // 1 day
+ 
+        return response([
+            'messge' => 'Success',
+        ])->withCookie($cookie);
     }
 
 
