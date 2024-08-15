@@ -33,8 +33,8 @@ class TaskSeeder extends Seeder
         // And now let's generate a few dozen users for our app:
         for ($i = 0; $i < 19; $i++) {
             Task::create([
-                'title' => $faker->sentence,
-                'description' => $faker->paragraph,
+                'title' => $faker->name,
+                'description' => $faker->sentence,
                 'due_date' => now()->addDays(rand(0, 30)),
                 'status' => rand(true, false),
             ]);

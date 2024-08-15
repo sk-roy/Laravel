@@ -20,7 +20,10 @@ class TaskController extends Controller
     public function index() 
     {
         $tasks = $this->taskService->index();
-        return response()->json($tasks);
+        return response()->json([
+            'status'=> 200,
+            'tasks'=> $tasks,
+        ]);
     }
 
     public function getTask($id) 
