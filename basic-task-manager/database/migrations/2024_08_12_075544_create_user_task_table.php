@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('user_task', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamp('shared_at')->nullable();
+            $table->foreignId('shared_by')->nullable()->constrained('users')->onDelete('set null');;
         });
     }
 

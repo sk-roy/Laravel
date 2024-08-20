@@ -24,14 +24,14 @@ class UserTaskSeeder extends Seeder
         // will be too slow.
 
         UserTask::create([
-            'user_id' => 1,
+            'shared_by' => 1,
             'task_id' => 1,
         ]);
 
         // And now let's generate a few dozen users for our app:
         for ($i = 2; $i < 20; $i++) {
             UserTask::create([
-                'user_id' => rand(1, 5),
+                'shared_by' => rand(1, 5),
                 'task_id' => $i,
             ]);
         }

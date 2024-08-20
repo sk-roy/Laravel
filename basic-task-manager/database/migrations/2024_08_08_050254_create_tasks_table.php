@@ -14,6 +14,17 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('due_date')->nullable();
             $table->boolean('status')->default(false);
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('modified_at')->nullable();
+        });
+
+        Schema::create('labels', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('task_id')->constrained()->onDelete('cascade');  
             $table->timestamps();
         });
     }
@@ -21,5 +32,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('tasks');
+        Schema::dropIfExists('labels');
     }
 };

@@ -26,8 +26,12 @@ class TaskSeeder extends Seeder
         Task::create([
             'title' => 'Add title',
             'description' => 'description',
-            'due_date' => now(),
+            'due_date' => now()->addDays(rand(0, 30)),
             'status' => true,
+            'created_by' => 1,
+            'modified_by' => null,
+            'created_at' => now(),
+            'modified_at' => null,
         ]);
 
         // And now let's generate a few dozen users for our app:
@@ -37,6 +41,10 @@ class TaskSeeder extends Seeder
                 'description' => $faker->sentence,
                 'due_date' => now()->addDays(rand(0, 30)),
                 'status' => rand(true, false),
+                'created_by' => rand(1, 5),
+                'modified_by' => null,
+                'created_at' => now(),
+                'modified_at' => null,
             ]);
         }
     }
