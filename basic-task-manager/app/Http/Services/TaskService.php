@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,21 +17,28 @@ class TaskService
         //
     }
 
-    public function index()
+
+    public function getAllTask($userId)
     {
-        return auth()->user()->tasks;
+        $user = User::findOrFail($userId);
+        return $user->tasks()->get();
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $userId)
     {
-        $task = Task::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'due_date' => $request->input('due_date'),
-            'status' => $request->input('status'),
-        ]);
+        try {
+            $task = Task::create([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'due_date' => $request->input('due_date'),
+                'status' => $request->input('status'),
+                'created_by' => $userId,
+            ]);
 
-        $task->users()->attach(Auth::id());
+            $task->users()->attach($userId);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while creating the task", 500);
+        }
     }
 
     public function edit($id)
@@ -39,7 +47,7 @@ class TaskService
         return $task;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $userId)
     {
         try {
             $task = Task::findOrFail($id);
@@ -48,6 +56,7 @@ class TaskService
                 'description' => $request->input('description'),
                 'due_date' => $request->input('due_date'),
                 'status' => $request->input('status'),
+                'updated_by' => $userId,
             ]);
             return $task;
         } catch (ModelNotFoundException $e) {
@@ -70,7 +79,7 @@ class TaskService
     }
 
     public function list($sortColumn, $sortDirection)
-    {        
+    { 
         return auth()->user()->tasks()->orderBy($sortColumn, $sortDirection)->get();
     }
 }

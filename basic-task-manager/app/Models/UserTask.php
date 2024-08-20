@@ -11,5 +11,5 @@ class UserTask extends Model
 
     protected $table = 'user_task';
 
-    protected $fillable = ['user_id', 'task_id'];
+    protected $fillable = ['user_id', 'task_id', 'shared_by'];
 }

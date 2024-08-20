@@ -19,7 +19,7 @@ class TaskController extends Controller
 
     public function index() 
     {
-        $tasks = $this->taskService->index();
+        $tasks = $this->taskService->getAllTask(Auth::id());
         return response()->json([
             'status'=> 200,
             'tasks'=> $tasks,
@@ -41,7 +41,7 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        $task = $this->taskService->create($request);
+        $task = $this->taskService->create($request, Auth::id());
         
         return response()->json(['message' => 'Task created successfully.']);
     }
@@ -54,7 +54,7 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'status' => 'nullable|boolean',
         ]);
-        $task = $this->taskService->update($request, $id);
+        $task = $this->taskService->update($request, $id, Auth::id());
 
         return response()->json(['task' => $task, 'success' => 'Task updated successfully.'], 401);
     }

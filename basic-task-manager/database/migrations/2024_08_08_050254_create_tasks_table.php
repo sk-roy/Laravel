@@ -10,14 +10,13 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->date('due_date')->nullable();
             $table->boolean('status')->default(false);
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-            $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('modified_at')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamps();
         });
 
         Schema::create('labels', function (Blueprint $table) {

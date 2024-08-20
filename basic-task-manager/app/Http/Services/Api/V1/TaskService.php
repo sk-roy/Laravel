@@ -17,9 +17,9 @@ class TaskService
         //
     }
 
-    public function index()
+    public function getAllTask($userId)
     {
-        $user = User::findOrFail(1);  // assume current user Id is 1
+        $user = User::findOrFail($userId);
         return $user->tasks()->get();
     }
 
@@ -28,23 +28,34 @@ class TaskService
         return Task::findOrFail($id);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $userId)
     {
-        $task = Task::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'due_date' => $request->input('due_date'),
-            'status' => $request->input('status'),
-        ]);
+        try {
+            $task = Task::create([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'due_date' => $request->input('due_date'),
+                'status' => $request->input('status'),
+                'created_by' => $userId,
+            ]);
 
-        $task->users()->attach(1); // assume current user Id is 1
+            $task->users()->attach($userId);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while creating the task", 500);
+        }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $userId)
     {
         try {
             $task = Task::findOrFail($id);
-            $task->update($request->all());
+            $task->update([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'due_date' => $request->input('due_date'),
+                'status' => $request->input('status'),
+                'updated_by' => $userId,
+            ]);
             return $task;
         } catch (ModelNotFoundException $e) {
             throw new Exception("Task not found", 404);

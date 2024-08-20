@@ -10,7 +10,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'due_date', 'status',
+        'title', 'description', 'due_date', 'status', 'created_by', 'updated_by',
     ];
 
     public $sortable = [
