@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Api\V1\TaskService;
 use Illuminate\Http\Request;
@@ -63,5 +64,26 @@ class TaskController extends Controller
     {
         $this->taskService->destroy($id);
         return response()->json(['message' => 'Task deleted successfully.']);
+    }
+
+    public function share(Request $request) 
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+            ]);      
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Invalid email']);
+        }  
+        
+        $shareWith = User::where('email', $request->input('email'))->first();
+        if (!$shareWith) {            
+            return response()->json(['message' => 'User not found']);
+        }
+        foreach ($request->input('selectedTasks') as $taskId) {
+            $this->taskService->share($taskId, $shareWith->id, Auth::id());
+        }
+        
+        return response()->json(['message' => 'Task shared successfully.']);
     }
 }

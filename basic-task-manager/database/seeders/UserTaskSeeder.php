@@ -26,6 +26,7 @@ class UserTaskSeeder extends Seeder
         UserTask::create([
             'user_id' => 1,
             'task_id' => 1,
+            'shared_by' => null,
         ]);
 
         // And now let's generate a few dozen users for our app:
@@ -33,6 +34,7 @@ class UserTaskSeeder extends Seeder
             UserTask::create([
                 'user_id' => rand(1, 5),
                 'task_id' => $i,
+                'shared_by' => null,
             ]);
         }
     }

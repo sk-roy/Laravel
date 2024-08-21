@@ -4,6 +4,7 @@ namespace App\Http\Services\Api\V1;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\UserTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,6 +74,21 @@ class TaskService
             throw new Exception("Task not found", 404);
         } catch (Exception $e) {
             throw new Exception("An error occurred while deleting the task", 500);
+        }
+    }
+
+    public function share($task_id, $shared_with, $shared_by)
+    {
+        try {            
+            UserTask::create([
+                'user_id' => $shared_with,
+                'task_id' => $task_id,
+                'shared_by' => $shared_by,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            throw new Exception("Task not found", 404);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while updating the task", 500);
         }
     }
 }

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('shared_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
+
+            $table->primary(['user_id', 'task_id']); //composite primary key
         });
     }
 
