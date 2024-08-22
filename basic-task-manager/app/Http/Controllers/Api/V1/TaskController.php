@@ -57,7 +57,7 @@ class TaskController extends Controller
         ]);
         $task = $this->taskService->update($request, $id, Auth::id());
 
-        return response()->json(['task' => $task, 'success' => 'Task updated successfully.'], 401);
+        return response()->json(['task' => $task, 'message' => 'Task updated successfully.']);
     }
 
     public function destroy($id)
