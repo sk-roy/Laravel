@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 
 class Task extends Model
 {
@@ -24,5 +25,10 @@ class Task extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_task');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

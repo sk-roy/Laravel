@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\Api\V1\TaskController;
+use App\Http\Controllers\Api\V1\CommentController;
 
 
 
@@ -21,6 +22,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tasks/{id}/update', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}/delete', [TaskController::class, 'destroy']);
     Route::post('/tasks/share', [TaskController::class, 'share']);
+
+    Route::get('/comments', [CommentController::class, 'index']);
+    Route::get('/comments/{id}', [CommentController::class, 'getComment']);
+    Route::get('/comments/user', [CommentController::class, 'getAllOfUser']);
+    Route::get('/comments/task/{id}', [CommentController::class, 'getAllOfTask']);
+    Route::post('/comments/create', [CommentController::class, 'store']);
+    Route::post('/comments/{id}/update', [CommentController::class, 'update']);
+    Route::delete('/comments/{id}/delete', [CommentController::class, 'destroy']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
