@@ -29,6 +29,8 @@ class TaskService
         $task = Task::findOrFail($id);
         $files = $task->files()->get();
         $task['files'] = $files;
+        $labels = $task->labels()->get();
+        $task['labels'] = $labels;
         $comments = $task->comments()->get();
 
         foreach($comments as $comment) {

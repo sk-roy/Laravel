@@ -21,7 +21,12 @@ class LabelController extends Controller
     {
         try {
             $taskId = $request->query('task_id');            
-            return $this->labelService->getLabels($taskId);
+            $labels = $this->labelService->getLabels($taskId);
+
+            return response()->json([
+                'message' => 'Got all labels',
+                'labels' => $labels,
+            ]);
         } catch (Exception $e) {            
             return response()->json(['message' => 'Request Failed.']);
         }

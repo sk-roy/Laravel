@@ -5,6 +5,7 @@ namespace App\Http\Services\Api\V1;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserTask;
+use App\Models\TaskLabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,10 +17,7 @@ class LabelService
             $task = Task::findOrFail($taskId);
             $labels = $task->labels()->get();
 
-            return response()->json([
-                'message' => 'Got all labels',
-                'labels' => $labels,
-            ]);
+            return $labels;
         } catch (Exception $e) {            
             return response()->json(['message' => 'Request Failed.']);
         }
