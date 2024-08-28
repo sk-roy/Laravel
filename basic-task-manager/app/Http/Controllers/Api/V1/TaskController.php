@@ -29,8 +29,11 @@ class TaskController extends Controller
 
     public function getTask($id) 
     {
-        $tasks = $this->taskService->getTask($id);
-        return response()->json($tasks);
+        $task = $this->taskService->getTask($id);
+        return response()->json([
+            'status'=> 200,
+            'task'=> $task,
+        ]);
     }
 
     public function store(Request $request) 

@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/comments/user', [CommentController::class, 'getAllOfUser']);
     Route::get('/comments/task/{id}', [CommentController::class, 'getAllOfTask']);
     Route::post('/comments/create', [CommentController::class, 'store']);
-    Route::post('/comments/{id}/update', [CommentController::class, 'update']);
+    Route::patch('/comments/{id}/update', [CommentController::class, 'update']);
     Route::delete('/comments/{id}/delete', [CommentController::class, 'destroy']);
 
     Route::post('/files', [FileController::class, 'store']);

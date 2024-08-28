@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('task_id')->constrained()->onDelete('cascade');  
-            $table->string('filename');
+            $table->string('filename')->unique();
             $table->string('path');
             $table->string('mime_type');
             $table->integer('size');

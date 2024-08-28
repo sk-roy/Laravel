@@ -32,7 +32,7 @@ class FileService
             $user = auth()->user();
             $uploadedFile = $request->file('file');
             $taskId = $request->input('task_id');
-            $filename = time() . '_' . $uploadedFile->getClientOriginalName();
+            $filename = $taskId . '_' . $uploadedFile->getClientOriginalName();
 
             $path = $uploadedFile->storeAs('uploads/' . $taskId, $filename, 'public');
 

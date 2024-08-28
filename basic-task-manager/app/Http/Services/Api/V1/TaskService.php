@@ -26,7 +26,16 @@ class TaskService
 
     public function getTask($id)
     {
-        return Task::findOrFail($id);
+        $task = Task::findOrFail($id);
+        $files = $task->files()->get();
+        $task['files'] = $files;
+        $comments = $task->comments()->get();
+
+        foreach($comments as $comment) {
+            $comment['name'] = User::find($comment['user_id'])->name;
+        }
+        $task['comments'] = $comments;
+        return $task;
     }
 
     public function create(Request $request, $userId)
