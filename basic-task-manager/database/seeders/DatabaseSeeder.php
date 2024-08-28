@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\TaskSeeder;
 use Database\Seeders\UserTaskSeeder;
+use Database\Seeders\LabelSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TaskSeeder::class,
             UserTaskSeeder::class,
+            LabelSeeder::class,
         ]);
     }
 }

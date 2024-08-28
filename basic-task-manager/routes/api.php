@@ -6,6 +6,8 @@ use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\CommentController;
 use App\Http\Controllers\Api\V1\FileController;
+use App\Http\Controllers\Api\V1\LabelController;
+
 
 
 Route::get('/user', function (Request $request) {
@@ -35,6 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/files', [FileController::class, 'index']);
     Route::get('/files/download', [FileController::class, 'download']);
     Route::delete('/files/{id}', [FileController::class, 'destroy']);
+    
+    Route::get('/labels', [LabelController::class, 'getLabels']);
+    Route::post('/labels/add', [LabelController::class, 'addLabel']);
+    Route::post('/labels/remove', [LabelController::class, 'removeLabel']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });

@@ -18,19 +18,10 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
-
-        Schema::create('labels', function (Blueprint $table) {
-            $table->id();
-            $table->string('label');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('task_id')->constrained()->onDelete('cascade');  
-            $table->timestamps();
-        });
     }
 
     public function down()
     {
         Schema::dropIfExists('tasks');
-        Schema::dropIfExists('labels');
     }
 };

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comment;
 use App\Models\File;
+use App\Models\Lable;
 
 class Task extends Model
 {
@@ -36,5 +37,9 @@ class Task extends Model
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function labels() {        
+        return $this->belongsToMany(Label::class, 'task_label');
     }
 }
