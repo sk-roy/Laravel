@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\CommentController;
-
+use App\Http\Controllers\Api\V1\FileController;
 
 
 Route::get('/user', function (Request $request) {
@@ -30,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments/create', [CommentController::class, 'store']);
     Route::post('/comments/{id}/update', [CommentController::class, 'update']);
     Route::delete('/comments/{id}/delete', [CommentController::class, 'destroy']);
+
+    Route::post('/files', [FileController::class, 'store']);
+    Route::get('/files', [FileController::class, 'index']);
+    Route::get('/files/download', [FileController::class, 'download']);
+    Route::delete('/files/{id}', [FileController::class, 'destroy']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
