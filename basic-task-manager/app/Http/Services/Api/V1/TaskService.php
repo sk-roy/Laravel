@@ -18,14 +18,26 @@ class TaskService
         //
     }
 
-    public function getAllTask($userId)
+    public function getAllTask(Request $request, $userId)
     {
-        $user = User::findOrFail($userId);
-        $tasks = $user->tasks()->get();
-        foreach($tasks as $task) {
-            $labels = $task->labels()->get();
-            $task['labels'] = $labels;
+        $sortKey = $request->query('sort_key', 'title');
+        $sortOrder = $request->query('sort_order', 'asc'); 
+
+        
+        $tasks = Task::with('labels')->get(); 
+
+        
+        $tasks->each(function ($task) {
+            $task->labels = $task->labels->pluck('name')->toArray();
+        });
+
+        if ($sortKey === 'labels') {
+            $tasks = $tasks->sortBy(function ($task) {
+                return implode(',', $task->labels); 
+            }, SORT_REGULAR, $sortOrder === 'desc' ? true : false);
         }
+        $tasks = $tasks->values();
+
         return $tasks;
     }
 

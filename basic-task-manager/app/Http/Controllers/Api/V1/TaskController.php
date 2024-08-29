@@ -18,9 +18,9 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function index() 
+    public function index(Request $request) 
     {
-        $tasks = $this->taskService->getAllTask(Auth::id());
+        $tasks = $this->taskService->getAllTask($request, Auth::id());
         return response()->json([
             'status'=> 200,
             'tasks'=> $tasks,
