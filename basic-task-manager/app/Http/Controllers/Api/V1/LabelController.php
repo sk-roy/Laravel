@@ -17,11 +17,10 @@ class LabelController extends Controller
         $this->labelService = $labelService;
     }
 
-    public function getLabels(Request $request)
+    public function getAll()
     {
-        try {
-            $taskId = $request->query('task_id');            
-            $labels = $this->labelService->getLabels($taskId);
+        try {          
+            $labels = $this->labelService->getAll();
 
             return response()->json([
                 'message' => 'Got all labels',
@@ -32,15 +31,13 @@ class LabelController extends Controller
         }
     }
 
-    public function addLabel(Request $request) {        
-        try {
-            $labelId = $request->query('label_id');
-            $taskId = $request->query('task_id');
-                        
-            return $this->labelService->addLabel($labelId, $taskId);
-        } catch (Exception $e) {
-            throw new Exception("An error occurred while adding label", 500);
-        }
+    public function addLabel(Request $request, $id) 
+    {
+        $label = $this->labelService->addLabel($request->input('label_id'), $id);
+        return response()->json([
+            'status'=> 200,
+            'message' => 'Label added succesfully',
+        ]);
     }
 
     public function removeLabel(Request $request) {        

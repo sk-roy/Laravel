@@ -38,8 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/files/download', [FileController::class, 'download']);
     Route::delete('/files/{id}', [FileController::class, 'destroy']);
     
-    Route::get('/labels', [LabelController::class, 'getLabels']);
-    Route::post('/labels/add', [LabelController::class, 'addLabel']);
+    Route::get('/labels', [LabelController::class, 'getAll']);
+    // Route::get('/labels', [LabelController::class, 'getLabels']);
+    Route::post('/tasks/{id}/labels/add', [LabelController::class, 'addLabel']);
     Route::post('/labels/remove', [LabelController::class, 'removeLabel']);
 
     Route::post('logout', [AuthController::class, 'logout']);

@@ -21,7 +21,12 @@ class TaskService
     public function getAllTask($userId)
     {
         $user = User::findOrFail($userId);
-        return $user->tasks()->get();
+        $tasks = $user->tasks()->get();
+        foreach($tasks as $task) {
+            $labels = $task->labels()->get();
+            $task['labels'] = $labels;
+        }
+        return $tasks;
     }
 
     public function getTask($id)

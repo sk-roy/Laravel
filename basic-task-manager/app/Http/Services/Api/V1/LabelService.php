@@ -5,12 +5,22 @@ namespace App\Http\Services\Api\V1;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\UserTask;
+use App\Models\Label;
 use App\Models\TaskLabel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LabelService
 {
+    public function getAll()
+    {
+        try {
+            // $task = Task::findOrFail($taskId);
+            return Label::all();
+        } catch (Exception $e) {            
+            return response()->json(['message' => 'Request Failed.']);
+        }
+    }
     public function getLabels($taskId)
     {
         try {
@@ -22,7 +32,7 @@ class LabelService
             return response()->json(['message' => 'Request Failed.']);
         }
     }
-
+    
     public function addLabel($labelId, $taskId) {        
         try {            
             TaskLabel::create([
