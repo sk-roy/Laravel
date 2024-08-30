@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Task;
 use App\Models\User;
 use App\Events\TaskUpdated;
+use App\Events\TaskDelete;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Api\V1\TaskService;
 use Illuminate\Http\Request;
@@ -67,7 +68,9 @@ class TaskController extends Controller
 
     public function destroy($id)
     {
-        $this->taskService->destroy($id);
+        $task = $this->taskService->destroy($id);
+        broadcast(new TaskDelete($task))->toOthers();
+
         return response()->json(['message' => 'Task deleted successfully.']);
     }
 

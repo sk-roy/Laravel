@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Support\Facades\Auth;
 
-class TaskUpdated implements ShouldBroadcastNow
+class TaskDelete implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -45,7 +45,7 @@ class TaskUpdated implements ShouldBroadcastNow
      */
     public function broadcastAs()
     {
-        return 'task.update';
+        return 'task.delete';
     }
 
     /**
@@ -60,9 +60,9 @@ class TaskUpdated implements ShouldBroadcastNow
             'title' => $this->task->title,
             'description' => $this->task->description,
             'status' => $this->task->status,
-            'creator_id' => Auth::id(),
-            'creator_name' => Auth::user()->name,
-            'updated_at' => $this->task->updated_at->toDateTimeString(),
+            'deleted_by_id' => Auth::id(),
+            'deleted_by_name' => Auth::user()->name,
+            'deleled_at' => now(),
         ];
     }
 }

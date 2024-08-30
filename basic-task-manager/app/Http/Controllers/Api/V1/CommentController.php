@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+
+use App\Events\TaskAddComment;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Api\V1\CommentService;
 use Illuminate\Http\Request;
@@ -79,6 +81,8 @@ class CommentController extends Controller
                 Auth::id(), 
                 $request->input('task_id')
             );
+            
+            broadcast(new TaskAddComment($comment))->toOthers();
             
             return response()->json([
                 'message' => 'Comment created successfully.',

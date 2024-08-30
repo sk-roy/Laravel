@@ -96,6 +96,7 @@ class TaskService
         try {
             $task = Task::findOrFail($id);
             $task->delete();
+            return $task;
         } catch (ModelNotFoundException $e) {
             throw new Exception("Task not found", 404);
         } catch (Exception $e) {

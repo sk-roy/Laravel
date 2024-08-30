@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use App\Models\Task;
+use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -13,18 +15,18 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Support\Facades\Auth;
 
-class TaskUpdated implements ShouldBroadcastNow
+class TaskAddComment implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $task;
+    public $comment;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Task $task)
+    public function __construct(Comment $comment)
     {
-        $this->task = $task;
+        $this->comment = $comment;
     }
 
     /**
@@ -35,7 +37,7 @@ class TaskUpdated implements ShouldBroadcastNow
     
     public function broadcastOn()
     {
-        return new Channel('task.' . $this->task->id);
+        return new Channel('task.' . $this->comment->task_id);
     }
 
     /**
@@ -45,7 +47,7 @@ class TaskUpdated implements ShouldBroadcastNow
      */
     public function broadcastAs()
     {
-        return 'task.update';
+        return 'task.addComment';
     }
 
     /**
@@ -54,15 +56,17 @@ class TaskUpdated implements ShouldBroadcastNow
      * @return array
      */
     public function broadcastWith(): array
-    {
+    {        
+        $task = Task::findOrFail($this->comment->task_id);
+        $user = User::findOrFail($this->comment->user_id);
         return [
-            'id' => $this->task->id,
-            'title' => $this->task->title,
-            'description' => $this->task->description,
-            'status' => $this->task->status,
-            'creator_id' => Auth::id(),
-            'creator_name' => Auth::user()->name,
-            'updated_at' => $this->task->updated_at->toDateTimeString(),
+            'id' => $this->comment->id,
+            'message' => $this->comment->message,
+            'user_id' => $this->comment->user_id,
+            'user_name' => $user->name,
+            'task_id' => $this->comment->task_id,
+            'task_title' => $task->title,
+            'created_at' => $this->comment->created_at->toDateTimeString(),
         ];
     }
 }
