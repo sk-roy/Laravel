@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Events\TaskUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Api\V1\TaskService;
 use Illuminate\Http\Request;
@@ -59,6 +60,7 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
         $task = $this->taskService->update($request, $id, Auth::id());
+        broadcast(new TaskUpdated($task))->toOthers();
 
         return response()->json(['task' => $task, 'message' => 'Task updated successfully.']);
     }

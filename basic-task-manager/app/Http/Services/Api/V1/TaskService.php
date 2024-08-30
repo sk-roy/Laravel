@@ -22,10 +22,8 @@ class TaskService
     {
         $sortKey = $request->query('sort_key', 'title');
         $sortOrder = $request->query('sort_order', 'asc'); 
-
         
-        $tasks = Task::with('labels')->get(); 
-
+        $tasks = User::findOrFail($userId)->tasks()->get();
         
         $tasks->each(function ($task) {
             $task->labels = $task->labels->pluck('name')->toArray();
