@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -22,14 +22,15 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'admin' => $request->admin,
+            'admin' => false,
         ]);
     
         $accessToken = $user->createToken('authToken')->accessToken;
     
         return response()->json([
+            'messge' => 'Registration success.',
             'user' => $user,
-            'access_token' => $accessToken,
+            'token' => $accessToken,
         ]);
     }
 
@@ -60,6 +61,20 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    public function checkAuth(Request $request)
+    {
+        if ($request->user()) {
+            return response()->json([
+                'authenticated' => true,
+                'user' => $request->user(),
+            ]);
+        }
+
+        return response()->json([
+            'authenticated' => false,
+        ], 401);
     }
 
 }

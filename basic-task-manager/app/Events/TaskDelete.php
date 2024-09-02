@@ -60,8 +60,8 @@ class TaskDelete implements ShouldBroadcastNow
             'title' => $this->task->title,
             'description' => $this->task->description,
             'status' => $this->task->status,
-            'deleted_by_id' => Auth::id(),
-            'deleted_by_name' => Auth::user()->name,
+            'creator_id' => Auth::id(),
+            'creator_name' => Auth::user()->name,
             'deleled_at' => now(),
         ];
     }

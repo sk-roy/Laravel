@@ -3,10 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\AuthController;
-use App\Http\Controllers\Api\V1\TaskController;
-use App\Http\Controllers\Api\V1\CommentController;
-use App\Http\Controllers\Api\V1\FileController;
-use App\Http\Controllers\Api\V1\LabelController;
+use App\Http\Controllers\API\V1\TaskController;
+use App\Http\Controllers\API\V1\CommentController;
+use App\Http\Controllers\API\V1\FileController;
+use App\Http\Controllers\API\V1\LabelController;
 
 
 
@@ -43,5 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tasks/{id}/labels/add', [LabelController::class, 'addLabel']);
     Route::post('/labels/remove', [LabelController::class, 'removeLabel']);
 
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/check-auth', [AuthController::class, 'checkAuth']);
 });

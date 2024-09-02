@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\Api\V1;
+namespace App\Http\Services\API\V1;
 
 use App\Models\File;
 use App\Models\Task;

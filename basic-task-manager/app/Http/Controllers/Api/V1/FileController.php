@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\Api\V1\FileService;
+use App\Http\Services\API\V1\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Exception;

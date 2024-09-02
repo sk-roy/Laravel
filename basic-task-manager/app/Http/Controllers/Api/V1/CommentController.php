@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 
 use App\Events\TaskAddComment;
 use App\Http\Controllers\Controller;
-use App\Http\Services\Api\V1\CommentService;
+use App\Http\Services\API\V1\CommentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

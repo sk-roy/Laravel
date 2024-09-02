@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 use App\Models\Task;
 use App\Models\User;
 use App\Events\TaskUpdated;
 use App\Events\TaskDelete;
 use App\Http\Controllers\Controller;
-use App\Http\Services\Api\V1\TaskService;
+use App\Http\Services\API\V1\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

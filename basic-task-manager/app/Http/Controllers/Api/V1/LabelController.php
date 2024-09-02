@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\API\V1;
 
 use App\Models\Task;
 use App\Models\TaskLabel;
 use App\Http\Controllers\Controller;
-use App\Http\Services\Api\V1\LabelService;
+use App\Http\Services\API\V1\LabelService;
 use Illuminate\Http\Request;
 
 class LabelController extends Controller

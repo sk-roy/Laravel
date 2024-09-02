@@ -62,8 +62,8 @@ class TaskAddComment implements ShouldBroadcastNow
         return [
             'id' => $this->comment->id,
             'message' => $this->comment->message,
-            'user_id' => $this->comment->user_id,
-            'user_name' => $user->name,
+            'creator_id' => Auth::id(),
+            'creator_name' => Auth::user()->name,
             'task_id' => $this->comment->task_id,
             'task_title' => $task->title,
             'created_at' => $this->comment->created_at->toDateTimeString(),
