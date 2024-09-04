@@ -64,4 +64,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(File::class);
     }
+    
+    /**
+     * The channels the user receives notification broadcasts on.
+     */
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'users.'.$this->id;
+    }
 }

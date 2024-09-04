@@ -4,12 +4,14 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Models\Task;
 use App\Models\User;
-use App\Events\TaskUpdated;
+use App\Notifications\TaskUpdated;
+use App\Events\TaskUpdated2;
 use App\Events\TaskDelete;
 use App\Http\Controllers\Controller;
 use App\Http\Services\API\V1\TaskService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class TaskController extends Controller
 {
@@ -61,17 +63,49 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
         $task = $this->taskService->update($request, $id, Auth::id());
-        broadcast(new TaskUpdated($task))->toOthers();
+        
+        $users = Task::find($task->id)
+            ->users()
+            ->where('users.id', '!=', Auth::id())
+            ->get();
+        $task["message"] = Auth::user()->name . " updated the task '" . $task->title . "'.";
+        
+        Notification::send($users, new TaskUpdated($task));
+
+        foreach ($users as $user) {
+            $task["userId"] = $user->id;
+            TaskUpdated2::dispatch($task);
+        }
 
         return response()->json(['task' => $task, 'message' => 'Task updated successfully.']);
     }
 
     public function destroy($id)
     {
-        $task = $this->taskService->destroy($id);
-        broadcast(new TaskDelete($task))->toOthers();
+        try {            
+            $task = Task::findOrFail($id);
 
-        return response()->json(['message' => 'Task deleted successfully.']);
+            $users = Task::find($task->id)
+                ->users()
+                ->where('users.id', '!=', Auth::id())
+                ->get();
+
+            if ($users) {
+                $task["message"] = Auth::user()->name . " deleted the task '" . $task->title . "'.";
+                
+                Notification::send($users, new TaskUpdated($task));
+                
+                foreach ($users as $user) {
+                    $task["userId"] = $user->id;
+                    TaskUpdated2::dispatch($task);
+                }
+            }
+            $task = $this->taskService->destroy($id);
+                
+            return response()->json(['message' => 'Task deleted successfully.']);
+        } catch (Exception $e) {            
+            return response()->json(['message' => 'Request Failed.']);
+        }
     }
 
     public function share(Request $request) 

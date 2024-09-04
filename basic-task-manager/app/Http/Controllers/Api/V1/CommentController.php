@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\API\V1;
 
 
-use App\Events\TaskAddComment;
+use App\Models\Task;
+use App\Models\User;
+use App\Notifications\TaskUpdated;
+use App\Events\TaskUpdated2;
 use App\Http\Controllers\Controller;
 use App\Http\Services\API\V1\CommentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+
 
 class CommentController extends Controller
 {
@@ -81,8 +86,21 @@ class CommentController extends Controller
                 Auth::id(), 
                 $request->input('task_id')
             );
+
+            $task = Task::findOrFail($request->input('task_id'));
             
-            broadcast(new TaskAddComment($comment))->toOthers();
+            $users = Task::find($task->id)
+                ->users()
+                ->where('users.id', '!=', Auth::id())
+                ->get();
+            $task["message"] = Auth::user()->name . " add a comment the task '" . $task->title . "'.";
+            
+            Notification::send($users, new TaskUpdated($task));
+    
+            foreach ($users as $user) {
+                $task["userId"] = $user->id;
+                TaskUpdated2::dispatch($task);
+            }
             
             return response()->json([
                 'message' => 'Comment created successfully.',

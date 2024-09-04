@@ -9,3 +9,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('task.{taskId}', function ($user, $taskId) {
     return $user->tasks->contains($taskId);
 });
+
+Broadcast::routes();

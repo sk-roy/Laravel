@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\TaskController;
 use App\Http\Controllers\API\V1\CommentController;
+use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\FileController;
 use App\Http\Controllers\API\V1\LabelController;
 
@@ -45,4 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/check-auth', [AuthController::class, 'checkAuth']);
+
+    
+    Route::get('/notification/unread', [NotificationController::class, 'getUnread']);
 });

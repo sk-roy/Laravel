@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Support\Facades\Auth;
 
-class TaskUpdated implements ShouldBroadcastNow
+class TaskUpdated2 implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -35,7 +35,7 @@ class TaskUpdated implements ShouldBroadcastNow
     
     public function broadcastOn()
     {
-        return new Channel('task.' . $this->task->id);
+        return new Channel('App.Models.User.' . $this->task->userId);
     }
 
     /**
@@ -56,13 +56,9 @@ class TaskUpdated implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         return [
-            'id' => $this->task->id,
-            'title' => $this->task->title,
-            'description' => $this->task->description,
-            'status' => $this->task->status,
-            'creator_id' => Auth::id(),
-            'creator_name' => Auth::user()->name,
-            'updated_at' => $this->task->updated_at->toDateTimeString(),
+            'task_id' => $this->task->id,
+            'task_title' => $this->task->title,
+            'message' => $this->task->message
         ];
     }
 }
