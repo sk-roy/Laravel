@@ -4,13 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\Lable;
 
 class Task extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'due_date', 'status',
+        'title', 'description', 'due_date', 'status', 'created_by', 'updated_by',
     ];
 
     public $sortable = [
@@ -24,5 +27,19 @@ class Task extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_task');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
+
+    public function labels() {        
+        return $this->belongsToMany(Label::class, 'task_label');
     }
 }

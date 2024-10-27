@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\API\V1;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\UserTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,11 +18,41 @@ class TaskService
         //
     }
 
-
-    public function getAllTask($userId)
+    public function getAllTask(Request $request, $userId)
     {
-        $user = User::findOrFail($userId);
-        return $user->tasks()->get();
+        $sortKey = $request->query('sort_key', 'title');
+        $sortOrder = $request->query('sort_order', 'asc'); 
+        
+        $tasks = User::findOrFail($userId)->tasks()->get();
+        
+        $tasks->each(function ($task) {
+            $task->labels = $task->labels->pluck('name')->toArray();
+        });
+
+        if ($sortKey === 'labels') {
+            $tasks = $tasks->sortBy(function ($task) {
+                return implode(',', $task->labels); 
+            }, SORT_REGULAR, $sortOrder === 'desc' ? true : false);
+        }
+        $tasks = $tasks->values();
+
+        return $tasks;
+    }
+
+    public function getTask($id)
+    {
+        $task = Task::findOrFail($id);
+        $files = $task->files()->get();
+        $task['files'] = $files;
+        $labels = $task->labels()->get();
+        $task['labels'] = $labels;
+        $comments = $task->comments()->get();
+
+        foreach($comments as $comment) {
+            $comment['name'] = User::find($comment['user_id'])->name;
+        }
+        $task['comments'] = $comments;
+        return $task;
     }
 
     public function create(Request $request, $userId)
@@ -39,12 +70,6 @@ class TaskService
         } catch (Exception $e) {
             throw new Exception("An error occurred while creating the task", 500);
         }
-    }
-
-    public function edit($id)
-    {
-        $task = Task::findOrFail($id);
-        return $task;
     }
 
     public function update(Request $request, $id, $userId)
@@ -71,6 +96,7 @@ class TaskService
         try {
             $task = Task::findOrFail($id);
             $task->delete();
+            return $task;
         } catch (ModelNotFoundException $e) {
             throw new Exception("Task not found", 404);
         } catch (Exception $e) {
@@ -78,8 +104,18 @@ class TaskService
         }
     }
 
-    public function list($sortColumn, $sortDirection)
-    { 
-        return auth()->user()->tasks()->orderBy($sortColumn, $sortDirection)->get();
+    public function share($task_id, $shared_with, $shared_by)
+    {
+        try {            
+            UserTask::create([
+                'user_id' => $shared_with,
+                'task_id' => $task_id,
+                'shared_by' => $shared_by,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            throw new Exception("Task not found", 404);
+        } catch (Exception $e) {
+            throw new Exception("An error occurred while updating the task", 500);
+        }
     }
 }

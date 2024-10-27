@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_task', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('task_id')->constrained()->onDelete('cascade');
-            $table->foreignId('shared_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('task_id')->constrained()->onDelete('cascade');  
+            $table->string('filename')->unique();
+            $table->string('path');
+            $table->string('mime_type');
+            $table->integer('size');
             $table->timestamps();
-
-            $table->primary(['user_id', 'task_id']); //composite primary key
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_task');
+        Schema::dropIfExists('files');
     }
 };

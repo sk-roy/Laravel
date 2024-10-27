@@ -18,7 +18,7 @@ class TaskController extends Controller
 
     public function index() 
     {
-        $tasks = $this->taskService->indexTask();
+        $tasks = $this->taskService->getAllTask(Auth::id());
         return view('dashboard', compact('tasks'));
     }
 
@@ -31,14 +31,14 @@ class TaskController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        $this->taskService->createTask($request);
+        $this->taskService->create($request, Auth::id());
 
         return redirect()->route('tasks.form')->with('success', 'Task created successfully.');
     }
 
     public function edit($id)
     {
-        $task = $this->taskService->editTask($id);
+        $task = $this->taskService->edit($id);
         return view('tasks.edit', compact('task'));
     }
 
@@ -50,21 +50,21 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'status' => 'nullable|boolean',
         ]);
-        $this->taskService->updateTask($request, $id);
+        $this->taskService->update($request, $id, Auth::id());
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
 
     public function destroy($id)
     {
-        $this->taskService->destroyTask($id);
+        $this->taskService->destroy($id);
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
 
     public function list() {
         $sortColumn = request('sort', 'status');
         $sortDirection = request('direction', 'asc'); 
-        $tasks = $this->taskService->listTask($sortColumn, $sortDirection);
+        $tasks = $this->taskService->list($sortColumn, $sortDirection);
         return view('tasks.list', compact('tasks'));
     }
 }

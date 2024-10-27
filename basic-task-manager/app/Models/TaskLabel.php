@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserTask extends Model
+class TaskLabel extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_task';
+    protected $table = 'task_label';
 
-    protected $fillable = ['user_id', 'task_id', 'shared_by'];
+    protected $fillable = ['user_id', 'task_id', 'label_id'];
 }
